@@ -853,3 +853,192 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
   FROM sales
   WHERE status = 'completed'
   GROUP BY payment_method;
+
+
+# TRIGGERS FOR ROLES TABLE
+
+
+  # Trigger: INSERT for roles
+  DELIMITER //
+  CREATE TRIGGER tr_roles_insert
+  AFTER INSERT ON roles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'roles', 'INSERT');
+  END//
+  DELIMITER ;
+
+  # Trigger: UPDATE for roles
+  DELIMITER //
+  CREATE TRIGGER tr_roles_update
+  AFTER UPDATE ON roles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'roles', 'UPDATE');
+  END//
+  DELIMITER ;
+
+  # Trigger: DELETE for roles
+  DELIMITER //
+  CREATE TRIGGER tr_roles_delete
+  AFTER DELETE ON roles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'roles', 'DELETE');
+  END//
+  DELIMITER ;
+
+ 
+  # TRIGGERS FOR CATEGORIES TABLE
+
+
+  # Trigger: INSERT for categories
+  DELIMITER //
+  CREATE TRIGGER tr_categories_insert
+  AFTER INSERT ON categories
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'categories', 'INSERT');
+  END//
+  DELIMITER ;
+
+  # Trigger: UPDATE for categories
+  DELIMITER //
+  CREATE TRIGGER tr_categories_update
+  AFTER UPDATE ON categories
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'categories', 'UPDATE');
+  END//
+  DELIMITER ;
+
+  # Trigger: DELETE for categories
+  DELIMITER //
+  CREATE TRIGGER tr_categories_delete
+  AFTER DELETE ON categories
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'categories', 'DELETE');
+  END//
+  DELIMITER ;
+
+
+  # TRIGGERS FOR BRANCHES TABLE
+
+
+  # Trigger: INSERT for branches
+  DELIMITER //
+  CREATE TRIGGER tr_branches_insert
+  AFTER INSERT ON branches
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'branches', 'INSERT');
+  END//
+  DELIMITER ;
+
+  # Trigger: UPDATE for branches
+  DELIMITER //
+  CREATE TRIGGER tr_branches_update
+  AFTER UPDATE ON branches
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'branches', 'UPDATE');
+  END//
+  DELIMITER ;
+
+  # Trigger: DELETE for branches
+  DELIMITER //
+  CREATE TRIGGER tr_branches_delete
+  AFTER DELETE ON branches
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'branches', 'DELETE');
+  END//
+  DELIMITER ;
+
+ 
+  # TRIGGERS FOR SUPPLIERS TABLE
+
+
+  # Trigger: INSERT for suppliers
+  DELIMITER //
+  CREATE TRIGGER tr_suppliers_insert
+  AFTER INSERT ON suppliers
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'suppliers', 'INSERT');
+  END//
+  DELIMITER ;
+
+  # Trigger: UPDATE for suppliers
+  DELIMITER //
+  CREATE TRIGGER tr_suppliers_update
+  AFTER UPDATE ON suppliers
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'suppliers', 'UPDATE');
+  END//
+  DELIMITER ;
+
+  # Trigger: DELETE for suppliers
+  DELIMITER //
+  CREATE TRIGGER tr_suppliers_delete
+  AFTER DELETE ON suppliers
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'suppliers', 'DELETE');
+  END//
+  DELIMITER ;
+
+
+  # TRIGGERS FOR CONSOLES TABLE
+ 
+
+  # Trigger: INSERT for consoles
+  DELIMITER //
+  CREATE TRIGGER tr_consoles_insert
+  AFTER INSERT ON consoles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'consoles', 'INSERT');
+  END//
+  DELIMITER ;
+
+  # Trigger: UPDATE for consoles
+  DELIMITER //
+  CREATE TRIGGER tr_consoles_update
+  AFTER UPDATE ON consoles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'consoles', 'UPDATE');
+  END//
+  DELIMITER ;
+
+  # Trigger: DELETE for consoles
+  DELIMITER //
+  CREATE TRIGGER tr_consoles_delete
+  AFTER DELETE ON consoles
+  FOR EACH ROW
+  BEGIN
+      INSERT INTO audit_log (date_, user_, table_, operation)
+      VALUES (NOW(), CURRENT_USER(), 'consoles', 'DELETE');
+  END//
+  DELIMITER ;
+
+
+
+
