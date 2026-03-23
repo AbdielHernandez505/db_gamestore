@@ -1041,4 +1041,252 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
 
 
 
+  # STORED PROCEDURES FOR ROLES TABLE
+
+
+  # Procedure: INSERT role
+  DELIMITER //
+  CREATE PROCEDURE sp_insert_role(
+      IN p_name VARCHAR(100),
+      IN p_description VARCHAR(255),
+      IN p_permissions VARCHAR(100)
+  )
+  BEGIN
+      INSERT INTO roles (name, description, permissions)
+      VALUES (p_name, p_description, p_permissions);
+  END//
+  DELIMITER ;
+
+  # Procedure: UPDATE role
+  DELIMITER //
+  CREATE PROCEDURE sp_update_role(
+      IN p_role_id INT,
+      IN p_name VARCHAR(100),
+      IN p_description VARCHAR(255),
+      IN p_permissions VARCHAR(100)
+  )
+  BEGIN
+      UPDATE roles
+      SET name = p_name,
+          description = p_description,
+          permissions = p_permissions
+      WHERE role_id = p_role_id;
+  END//
+  DELIMITER ;
+
+  # Procedure: DELETE role
+  DELIMITER //
+  CREATE PROCEDURE sp_delete_role(
+      IN p_role_id INT
+  )
+  BEGIN
+      DELETE FROM roles WHERE role_id = p_role_id;
+  END//
+  DELIMITER ;
+
+
+  # STORED PROCEDURES FOR CATEGORIES TABLE
+
+
+  # Procedure: INSERT category
+  DELIMITER //
+  CREATE PROCEDURE sp_insert_category(
+      IN p_name VARCHAR(50),
+      IN p_min_age INT,
+      IN p_description VARCHAR(255)
+  )
+  BEGIN
+      INSERT INTO categories (name, min_age, description)
+      VALUES (p_name, p_min_age, p_description);
+  END//
+  DELIMITER ;
+
+  # Procedure: UPDATE category
+  DELIMITER //
+  CREATE PROCEDURE sp_update_category(
+      IN p_category_id INT,
+      IN p_name VARCHAR(50),
+      IN p_min_age INT,
+      IN p_description VARCHAR(255)
+  )
+  BEGIN
+      UPDATE categories
+      SET name = p_name,
+          min_age = p_min_age,
+          description = p_description
+      WHERE category_id = p_category_id;
+  END//
+  DELIMITER ;
+
+  # Procedure: DELETE category
+  DELIMITER //
+  CREATE PROCEDURE sp_delete_category(
+      IN p_category_id INT
+  )
+  BEGIN
+      DELETE FROM categories WHERE category_id = p_category_id;
+  END//
+  DELIMITER ;
+
+
+  # STORED PROCEDURES FOR BRANCHES TABLE
+
+
+  # Procedure: INSERT branch
+  DELIMITER //
+  CREATE PROCEDURE sp_insert_branch(
+      IN p_name VARCHAR(100),
+      IN p_address VARCHAR(200),
+      IN p_phone VARCHAR(20),
+      IN p_email VARCHAR(100),
+      IN p_schedule VARCHAR(100),
+      IN p_branch_number VARCHAR(10),
+      IN p_manager_id INT,
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      INSERT INTO branches (name, address, phone, email, schedule, branch_number, manager_id, status)
+      VALUES (p_name, p_address, p_phone, p_email, p_schedule, p_branch_number, p_manager_id, p_status);
+  END//
+  DELIMITER ;
+
+  # Procedure: UPDATE branch
+  DELIMITER //
+  CREATE PROCEDURE sp_update_branch(
+      IN p_branch_id INT,
+      IN p_name VARCHAR(100),
+      IN p_address VARCHAR(200),
+      IN p_phone VARCHAR(20),
+      IN p_email VARCHAR(100),
+      IN p_schedule VARCHAR(100),
+      IN p_branch_number VARCHAR(10),
+      IN p_manager_id INT,
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      UPDATE branches
+      SET name = p_name,
+          address = p_address,
+          phone = p_phone,
+          email = p_email,
+          schedule = p_schedule,
+          branch_number = p_branch_number,
+          manager_id = p_manager_id,
+          status = p_status
+      WHERE branch_id = p_branch_id;
+  END//
+  DELIMITER ;
+
+  # Procedure: DELETE branch
+  DELIMITER //
+  CREATE PROCEDURE sp_delete_branch(
+      IN p_branch_id INT
+  )
+  BEGIN
+      DELETE FROM branches WHERE branch_id = p_branch_id;
+  END//
+  DELIMITER ;
+
+
+  # STORED PROCEDURES FOR SUPPLIERS TABLE
+
+
+  # Procedure: INSERT supplier
+  DELIMITER //
+  CREATE PROCEDURE sp_insert_supplier(
+      IN p_name VARCHAR(100),
+      IN p_contact_name VARCHAR(100),
+      IN p_phone VARCHAR(20),
+      IN p_email VARCHAR(100),
+      IN p_address VARCHAR(200),
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      INSERT INTO suppliers (name, contact_name, phone, email, address, status)
+      VALUES (p_name, p_contact_name, p_phone, p_email, p_address, p_status);
+  END//
+  DELIMITER ;
+
+  # Procedure: UPDATE supplier
+  DELIMITER //
+  CREATE PROCEDURE sp_update_supplier(
+      IN p_supplier_id INT,
+      IN p_name VARCHAR(100),
+      IN p_contact_name VARCHAR(100),
+      IN p_phone VARCHAR(20),
+      IN p_email VARCHAR(100),
+      IN p_address VARCHAR(200),
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      UPDATE suppliers
+      SET name = p_name,
+          contact_name = p_contact_name,
+          phone = p_phone,
+          email = p_email,
+          address = p_address,
+          status = p_status
+      WHERE supplier_id = p_supplier_id;
+  END//
+  DELIMITER ;
+
+  # Procedure: DELETE supplier
+  DELIMITER //
+  CREATE PROCEDURE sp_delete_supplier(
+      IN p_supplier_id INT
+  )
+  BEGIN
+      DELETE FROM suppliers WHERE supplier_id = p_supplier_id;
+  END//
+  DELIMITER ;
+
+
+  # STORED PROCEDURES FOR CONSOLES TABLE
+  
+
+  # Procedure: INSERT console
+  DELIMITER //
+  CREATE PROCEDURE sp_insert_console(
+      IN p_name VARCHAR(50),
+      IN p_manufacturer VARCHAR(50),
+      IN p_release_year INT,
+      IN p_price DECIMAL(10,2),
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      INSERT INTO consoles (name, manufacturer, release_year, price, status)
+      VALUES (p_name, p_manufacturer, p_release_year, p_price, p_status);
+  END//
+  DELIMITER ;
+
+  # Procedure: UPDATE console
+  DELIMITER //
+  CREATE PROCEDURE sp_update_console(
+      IN p_console_id INT,
+      IN p_name VARCHAR(50),
+      IN p_manufacturer VARCHAR(50),
+      IN p_release_year INT,
+      IN p_price DECIMAL(10,2),
+      IN p_status VARCHAR(20)
+  )
+  BEGIN
+      UPDATE consoles
+      SET name = p_name,
+          manufacturer = p_manufacturer,
+          release_year = p_release_year,
+          price = p_price,
+          status = p_status
+      WHERE console_id = p_console_id;
+  END//
+  DELIMITER ;
+
+  # Procedure: DELETE console
+  DELIMITER //
+  CREATE PROCEDURE sp_delete_console(
+      IN p_console_id INT
+  )
+  BEGIN
+      DELETE FROM consoles WHERE console_id = p_console_id;
+  END//
+  DELIMITER ;
 
