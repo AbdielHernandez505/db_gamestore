@@ -741,3 +741,51 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
 (NOW() - INTERVAL 3 HOUR, 'm.gonzalez@gamezone.com', 'inventory',  'UPDATE'),
 (NOW() - INTERVAL 2 HOUR, 'c.mendoza@gamezone.com',  'purchases',  'INSERT'),
 (NOW() - INTERVAL 1 HOUR, 'admin@gamezone.com',      'games',      'INSERT');
+
+
+ # Report 1:Total sales for branch
+  SELECT
+      b.name AS sucursal,
+      SUM(s.total) AS total_ventas
+  FROM branches b
+  JOIN sales s ON s.branch_id = b.branch_id
+  WHERE s.status = 'completed'
+  GROUP BY b.branch_id, b.name
+  ORDER BY total_ventas DESC;
+
+  # Report 2: The 5 best-selling games
+  SELECT
+      g.title AS juego,
+      SUM(sd.quantity) AS cantidad_vendida
+  FROM games g
+  JOIN sale_details sd ON sd.game_id = g.game_id
+  GROUP BY g.game_id, g.title
+  ORDER BY cantidad_vendida DESC
+  LIMIT 5;
+
+   # Report 3: Games with low stock per branch
+  SELECT
+      b.name AS sucursal,
+      g.title AS juego,
+      i.quantity AS stock_actual
+  FROM inventory i
+  JOIN branches b ON b.branch_id = i.branch_id
+  JOIN games g ON g.game_id = i.game_id
+  WHERE i.quantity < i.min_stock
+  ORDER BY stock_actual ASC;
+
+  # Report 4: Number of customers by membership type
+  SELECT
+      membership_type AS membresia,
+      COUNT(*) AS total_clientes
+  FROM clients
+  GROUP BY membership_type;
+
+  # Report 5: Sales by payment method
+  SELECT
+      payment_method AS metodo_pago,
+      COUNT(*) AS total_ventas,
+      SUM(total) AS total_monto
+  FROM sales
+  WHERE status = 'completed'
+  GROUP BY payment_method;
