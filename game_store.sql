@@ -742,7 +742,7 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
 (NOW() - INTERVAL 2 HOUR, 'c.mendoza@gamezone.com',  'purchases',  'INSERT'),
 (NOW() - INTERVAL 1 HOUR, 'admin@gamezone.com',      'games',      'INSERT');
 
-
+###Reports 
  # Report 1:Total sales for branch
   SELECT
       b.name AS sucursal,
@@ -786,6 +786,70 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
       payment_method AS metodo_pago,
       COUNT(*) AS total_ventas,
       SUM(total) AS total_monto
+  FROM sales
+  WHERE status = 'completed'
+  GROUP BY payment_method;
+
+
+#Views 
+
+
+# View 1: Total sales by branch
+  CREATE VIEW vw_total_sales_by_branch AS
+  SELECT
+      row_number() OVER (ORDER BY SUM(s.total) DESC) AS view_id,
+      b.branch_id,
+      b.name AS branch_name,
+      SUM(s.total) AS total_sales
+  FROM branches b
+  JOIN sales s ON s.branch_id = b.branch_id
+  WHERE s.status = 'completed'
+  GROUP BY b.branch_id, b.name;
+
+  # View 2: Top 5 best-selling games
+  CREATE VIEW vw_top_5_best_selling_games AS
+  SELECT
+      row_number() OVER (ORDER BY SUM(sd.quantity) DESC) AS view_id,
+      g.game_id,
+      g.title AS game_title,
+      SUM(sd.quantity) AS total_sold
+  FROM games g
+  JOIN sale_details sd ON sd.game_id = g.game_id
+  GROUP BY g.game_id, g.title
+  ORDER BY total_sold DESC
+  LIMIT 5;
+
+  # View 3: Games with low stock by branch
+  CREATE VIEW vw_low_stock_games_by_branch AS
+  SELECT
+      row_number() OVER (ORDER BY i.quantity ASC) AS view_id,
+      b.branch_id,
+      b.name AS branch_name,
+      g.game_id,
+      g.title AS game_title,
+      i.quantity AS current_stock,
+      i.min_stock
+  FROM inventory i
+  JOIN branches b ON b.branch_id = i.branch_id
+  JOIN games g ON g.game_id = i.game_id
+  WHERE i.quantity < i.min_stock;
+
+  # View 4: Customers by membership type
+  CREATE VIEW vw_customers_by_membership AS
+  SELECT
+      row_number() OVER (ORDER BY membership_type) AS view_id,
+      membership_type,
+      COUNT(*) AS total_customers
+  FROM clients
+  GROUP BY membership_type;
+
+  # View 5: Sales by payment method
+  CREATE VIEW vw_sales_by_payment_method AS
+  SELECT
+      row_number() OVER (ORDER BY payment_method) AS view_id,
+      payment_method,
+      COUNT(*) AS total_sales,
+      SUM(total) AS total_amount
   FROM sales
   WHERE status = 'completed'
   GROUP BY payment_method;
