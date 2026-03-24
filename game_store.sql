@@ -825,6 +825,80 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
   WHERE status = 'completed'
   GROUP BY payment_method;
 
+-- # Report 6: Daily sales summary
+SELECT
+    DATE(s.sale_date) AS fecha,
+    COUNT(*) AS total_ventas,
+    SUM(s.total) AS total_monto
+FROM sales s
+WHERE s.status = 'completed'
+GROUP BY DATE(s.sale_date)
+ORDER BY fecha DESC;
+
+
+-- Report 7: Top customers by total spending
+SELECT
+    CONCAT(c.first_name, ' ', c.last_name) AS cliente,
+    SUM(s.total) AS total_gastado
+FROM clients c
+JOIN sales s ON s.client_id = c.client_id
+WHERE s.status = 'completed'
+GROUP BY c.client_id, cliente
+ORDER BY total_gastado DESC
+LIMIT 5;
+
+
+-- Report 8: Sales by employee
+SELECT
+    CONCAT(e.first_name, ' ', e.last_name) AS empleado,
+    COUNT(s.sale_id) AS total_ventas,
+    SUM(s.total) AS total_monto
+FROM employees e
+JOIN sales s ON s.employee_id = e.employee_id
+WHERE s.status = 'completed'
+GROUP BY e.employee_id, empleado
+ORDER BY total_monto DESC;
+
+
+-- Report 9: Total inventory by branch
+SELECT
+    b.name AS sucursal,
+    SUM(i.quantity) AS total_productos
+FROM branches b
+JOIN inventory i ON i.branch_id = b.branch_id
+GROUP BY b.branch_id, b.name
+ORDER BY total_productos DESC;
+
+
+-- Report 10: Top sold items (games, consoles, products)
+SELECT
+    'Juego' AS tipo,
+    g.title AS nombre,
+    SUM(sd.quantity) AS total_vendido
+FROM sale_details sd
+JOIN games g ON g.game_id = sd.game_id
+GROUP BY g.title
+
+UNION ALL
+
+SELECT
+    'Consola',
+    c.name,
+    SUM(sd.quantity)
+FROM sale_details sd
+JOIN consoles c ON c.console_id = sd.console_id
+GROUP BY c.name
+
+UNION ALL
+
+SELECT
+    'Producto',
+    p.name,
+    SUM(sd.quantity)
+FROM sale_details sd
+JOIN products p ON p.product_id = sd.product_id
+GROUP BY p.name;
+
 
 #Views 
 
@@ -888,6 +962,88 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
   FROM sales
   WHERE status = 'completed'
   GROUP BY payment_method;
+
+-- View 6: Daily sales summary
+CREATE VIEW vw_daily_sales AS
+SELECT
+    DATE(s.sale_date) AS sale_day,
+    COUNT(*) AS total_sales,
+    SUM(s.total) AS total_amount
+FROM sales s
+WHERE s.status = 'completed'
+GROUP BY DATE(s.sale_date)
+ORDER BY sale_day DESC;
+
+
+-- View 7: Top customers by total spending
+CREATE VIEW vw_top_customers AS
+SELECT
+    c.client_id,
+    CONCAT(c.first_name, ' ', c.last_name) AS client_name,
+    SUM(s.total) AS total_spent
+FROM clients c
+JOIN sales s ON s.client_id = c.client_id
+WHERE s.status = 'completed'
+GROUP BY c.client_id, client_name
+ORDER BY total_spent DESC
+LIMIT 5;
+
+
+-- View 8: Sales by employee
+CREATE VIEW vw_sales_by_employee AS
+SELECT
+    e.employee_id,
+    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+    COUNT(s.sale_id) AS total_sales,
+    SUM(s.total) AS total_amount
+FROM employees e
+JOIN sales s ON s.employee_id = e.employee_id
+WHERE s.status = 'completed'
+GROUP BY e.employee_id, employee_name
+ORDER BY total_amount DESC;
+
+
+-- View 9: Total inventory by branch
+CREATE VIEW vw_inventory_by_branch AS
+SELECT
+    b.branch_id,
+    b.name AS branch_name,
+    SUM(i.quantity) AS total_items
+FROM branches b
+JOIN inventory i ON i.branch_id = b.branch_id
+GROUP BY b.branch_id, b.name
+ORDER BY total_items DESC;
+
+
+-- View 10: Top sold items (games, consoles, products)
+CREATE VIEW vw_top_sold_items AS
+SELECT
+    'game' AS item_type,
+    g.title AS item_name,
+    SUM(sd.quantity) AS total_sold
+FROM sale_details sd
+JOIN games g ON g.game_id = sd.game_id
+GROUP BY g.title
+
+UNION ALL
+
+SELECT
+    'console',
+    c.name,
+    SUM(sd.quantity)
+FROM sale_details sd
+JOIN consoles c ON c.console_id = sd.console_id
+GROUP BY c.name
+
+UNION ALL
+
+SELECT
+    'product',
+    p.name,
+    SUM(sd.quantity)
+FROM sale_details sd
+JOIN products p ON p.product_id = sd.product_id
+GROUP BY p.name;
 
 
 # TRIGGERS FOR ROLES TABLE
