@@ -208,6 +208,41 @@ CREATE TABLE audit_log (
     operation VARCHAR(10)
 );
 
+<<<<<<< Updated upstream
+=======
+-- ######################################
+-- Corrections
+-- ######################################
+
+
+-- Remove duplicated stock
+
+-- ALTER TABLE games 
+
+ALTER TABLE games DROP COLUMN stock_total;
+ALTER TABLE products DROP COLUMN stock_total;
+
+-- Delete unnecessary table
+
+DROP TABLE categories_esrb;
+
+-- Avoid duplicates in inventory
+
+ALTER TABLE inventory
+ADD CONSTRAINT unique_inventory 
+UNIQUE (branch_id, game_id, console_id, product_id);
+
+-- Avoid duplicates in sale_details
+ALTER TABLE sale_details
+ADD CONSTRAINT unique_sale_item 
+UNIQUE (sale_id, game_id, console_id, product_id);
+
+-- Avoid duplicates in purchase_details
+ALTER TABLE purchase_details
+ADD CONSTRAINT unique_purchase_item 
+UNIQUE (purchase_id, game_id, console_id, product_id);
+
+>>>>>>> Stashed changes
 -- DATA
 
  
@@ -1039,10 +1074,257 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
   END//
   DELIMITER ;
 
+<<<<<<< Updated upstream
 
 
   # STORED PROCEDURES FOR ROLES TABLE
 
+=======
+-- Trigger: Insert for GAMES
+
+DELIMITER //
+CREATE TRIGGER tr_games_insert AFTER INSERT ON games
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'games', 'INSERT');
+END//
+DELIMITER ;
+
+-- Trigger: Update for GAMES
+
+DELIMITER //
+CREATE TRIGGER tr_games_update AFTER UPDATE ON games
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'games', 'UPDATE');
+END//
+DELIMITER ;
+
+-- Trigger: Delete for GAMES
+
+DELIMITER //
+CREATE TRIGGER tr_games_delete AFTER DELETE ON games
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'games', 'DELETE');
+END//
+DELIMITER ;
+
+-- Trigger: Insert for PRODUCTS
+
+DELIMITER //
+CREATE TRIGGER tr_products_insert AFTER INSERT ON products
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'products', 'INSERT');
+END//
+DELIMITER ;
+
+-- Trigger: Update for PRODUCTS
+DELIMITER //
+CREATE TRIGGER tr_products_update AFTER UPDATE ON products
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'products', 'UPDATE');
+END//
+DELIMITER ;
+
+-- Trigger: Delete for Products
+
+DELIMITER //
+CREATE TRIGGER tr_products_delete AFTER DELETE ON products
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'products', 'DELETE');
+END//
+DELIMITER ;
+
+-- INVENTORY 
+
+DELIMITER //
+CREATE TRIGGER tr_inventory_insert AFTER INSERT ON inventory
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'inventory', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_inventory_update AFTER UPDATE ON inventory
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'inventory', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_inventory_delete AFTER DELETE ON inventory
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'inventory', 'DELETE');
+END//
+DELIMITER ;
+
+-- CLIENTS
+
+DELIMITER //
+CREATE TRIGGER tr_clients_insert AFTER INSERT ON clients
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'clients', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_clients_update AFTER UPDATE ON clients
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'clients', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_clients_delete AFTER DELETE ON clients
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'clients', 'DELETE');
+END//
+DELIMITER ;
+
+-- EMPLOYEES
+
+DELIMITER //
+CREATE TRIGGER tr_employees_insert AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'employees', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_employees_update AFTER UPDATE ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'employees', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_employees_delete AFTER DELETE ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'employees', 'DELETE');
+END//
+DELIMITER ;
+
+-- SALES
+
+DELIMITER //
+CREATE TRIGGER tr_sales_insert AFTER INSERT ON sales
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sales', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_sales_update AFTER UPDATE ON sales
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sales', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_sales_delete AFTER DELETE ON sales
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sales', 'DELETE');
+END//
+DELIMITER ;
+
+-- SALES_DETAILS
+
+DELIMITER //
+CREATE TRIGGER tr_sale_details_insert AFTER INSERT ON sale_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sale_details', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_sale_details_update AFTER UPDATE ON sale_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sale_details', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_sale_details_delete AFTER DELETE ON sale_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'sale_details', 'DELETE');
+END//
+DELIMITER ;
+
+-- PURCHASES
+
+DELIMITER //
+CREATE TRIGGER tr_purchases_insert AFTER INSERT ON purchases
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchases', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_purchases_update AFTER UPDATE ON purchases
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchases', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_purchases_delete AFTER DELETE ON purchases
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchases', 'DELETE');
+END//
+DELIMITER ;
+
+-- PURCHASE_DETAILS
+
+DELIMITER //
+CREATE TRIGGER tr_purchase_details_insert AFTER INSERT ON purchase_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchase_details', 'INSERT');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_purchase_details_update AFTER UPDATE ON purchase_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchase_details', 'UPDATE');
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tr_purchase_details_delete AFTER DELETE ON purchase_details
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log VALUES (NULL, NOW(), CURRENT_USER(), 'purchase_details', 'DELETE');
+END//
+DELIMITER ;
+
+-- ###################################
+  # STORED PROCEDURES FOR ROLES TABLE
+-- ###################################
+>>>>>>> Stashed changes
 
   # Procedure: INSERT role
   DELIMITER //
@@ -1290,3 +1572,137 @@ INSERT INTO audit_log (date_, user_, table_, operation) VALUES
   END//
   DELIMITER ;
 
+<<<<<<< Updated upstream
+=======
+-- STORED PROCEDURE: GAMES
+
+# Procedure: INSERT game
+DELIMITER //
+CREATE PROCEDURE sp_insert_game(
+    IN p_title VARCHAR(150),
+    IN p_console_id INT,
+    IN p_category_id INT,
+    IN p_price DECIMAL(10,2),
+    IN p_release_date DATE,
+    IN p_rating DECIMAL(3,1),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    INSERT INTO games(title, console_id, category_id, price, release_date, rating, status)
+    VALUES (p_title, p_console_id, p_category_id, p_price, p_release_date, p_rating, p_status);
+END//
+DELIMITER ;
+
+# Procedure: UPDATE game
+DELIMITER //
+CREATE PROCEDURE sp_update_game(
+    IN p_id INT,
+    IN p_title VARCHAR(150),
+    IN p_console_id INT,
+    IN p_category_id INT,
+    IN p_price DECIMAL(10,2),
+    IN p_release_date DATE,
+    IN p_rating DECIMAL(3,1),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    UPDATE games SET title=p_title, console_id=p_console_id,
+    category_id=p_category_id, price=p_price,
+    release_date=p_release_date, rating=p_rating, status=p_status
+    WHERE game_id=p_id;
+END//
+DELIMITER ;
+
+# Procedure: DELETE game
+DELIMITER //
+CREATE PROCEDURE sp_delete_game(IN p_id INT)
+BEGIN
+    DELETE FROM games WHERE game_id=p_id;
+END//
+DELIMITER ;
+
+-- STORED PROCEDURE: PRODUCTS
+
+# Procedure: INSERT product
+DELIMITER //
+CREATE PROCEDURE sp_insert_product(
+    IN p_name VARCHAR(100),
+    IN p_desc VARCHAR(255),
+    IN p_price DECIMAL(10,2),
+    IN p_type VARCHAR(50),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    INSERT INTO products(name, description, price, product_type, status)
+    VALUES(p_name, p_desc, p_price, p_type, p_status);
+END//
+DELIMITER ;
+
+# Procedure: UPDATE product
+DELIMITER //
+CREATE PROCEDURE sp_update_product(
+    IN p_id INT,
+    IN p_name VARCHAR(100),
+    IN p_desc VARCHAR(255),
+    IN p_price DECIMAL(10,2),
+    IN p_type VARCHAR(50),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    UPDATE products SET name=p_name, description=p_desc,
+    price=p_price, product_type=p_type, status=p_status
+    WHERE product_id=p_id;
+END//
+DELIMITER ;
+
+# Procedure: DELETE product
+DELIMITER //
+CREATE PROCEDURE sp_delete_product(IN p_id INT)
+BEGIN
+    DELETE FROM products WHERE product_id=p_id;
+END//
+DELIMITER ;
+
+-- STORED PROCEDURES: INVENTORY
+
+# Procedure: INSERT product
+DELIMITER //
+CREATE PROCEDURE sp_insert_product(
+    IN p_name VARCHAR(100),
+    IN p_desc VARCHAR(255),
+    IN p_price DECIMAL(10,2),
+    IN p_type VARCHAR(50),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    INSERT INTO products(name, description, price, product_type, status)
+    VALUES(p_name, p_desc, p_price, p_type, p_status);
+END//
+DELIMITER ;
+
+# Procedure: UPDATE product
+DELIMITER //
+CREATE PROCEDURE sp_update_product(
+    IN p_id INT,
+    IN p_name VARCHAR(100),
+    IN p_desc VARCHAR(255),
+    IN p_price DECIMAL(10,2),
+    IN p_type VARCHAR(50),
+    IN p_status VARCHAR(20)
+)
+BEGIN
+    UPDATE products SET name=p_name, description=p_desc,
+    price=p_price, product_type=p_type, status=p_status
+    WHERE product_id=p_id;
+END//
+DELIMITER ;
+
+# Procedure: DELETE product
+DELIMITER //
+CREATE PROCEDURE sp_delete_product(IN p_id INT)
+BEGIN
+    DELETE FROM products WHERE product_id=p_id;
+END//
+DELIMITER ;
+
+>>>>>>> Stashed changes
